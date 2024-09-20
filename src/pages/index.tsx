@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, Match } from "effect";
 import { Api } from "../services/Api";
 import { RuntimeServer } from "../services/RuntimeServer";
 
@@ -14,18 +14,33 @@ const main = Effect.gen(function* () {
 }).pipe(Effect.scoped);
 
 export default async function HomePage() {
-  const posts = await RuntimeServer.runPromise(main);
   return (
     <div>
       <title>Index</title>
-      <div>
-        {posts.map((post) => (
-          <div key={post.id}>
-            <h1>{post.title}</h1>
-            <p>{post.body}</p>
-          </div>
-        ))}
-      </div>
+      {await RuntimeServer.runPromise(
+        main.pipe(
+          Effect.mapError((errors) =>
+            Match.value(errors).pipe(
+              Match.tagsExhaustive({
+                ParseError: (error) => <span>ParseError</span>,
+                RequestError: (error) => <span>RequestError</span>,
+                ResponseError: (error) => <span>ResponseError</span>,
+              })
+            )
+          ),
+          Effect.map((posts) => (
+            <div>
+              {posts.map((post) => (
+                <div key={post.id}>
+                  <h1>{post.title}</h1>
+                  <p>{post.body}</p>
+                </div>
+              ))}
+            </div>
+          )),
+          Effect.catchAll(Effect.succeed)
+        )
+      )}
     </div>
   );
 }
