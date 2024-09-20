@@ -10,6 +10,7 @@
     "start": "waku start"
   },
   "dependencies": {
+    "@effect/platform": "^0.65.5",
     "@effect/schema": "^0.73.4",
     "effect": "^3.8.3",
     "react": "19.0.0-rc-d6cb4e77-20240911",
