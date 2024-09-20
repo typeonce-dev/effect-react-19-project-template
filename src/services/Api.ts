@@ -2,8 +2,8 @@ import { Context, Effect, Layer } from "effect";
 import { JsonPlaceholderClient } from "./JsonPlaceholderClient";
 
 const make = Effect.map(JsonPlaceholderClient, (client) => ({
-  getPosts: Effect.dieMessage("TODO"),
-  getPostById: (id: string) => Effect.dieMessage("TODO"),
+  getPosts: client.get("/posts"),
+  getPostById: (id: string) => client.get(`/posts/${id}`),
 }));
 
 export class Api extends Context.Tag("Api")<Api, typeof make>() {
