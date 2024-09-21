@@ -2,7 +2,11 @@
 
 import type { Post } from "../services/schema";
 
-export default function Posts({ posts }: { posts: readonly Post[] }) {
+export default function Posts({
+  posts,
+}: {
+  posts: readonly (typeof Post.Encoded)[];
+}) {
   return (
     <div>
       {posts.map((post) => (
