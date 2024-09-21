@@ -1,5 +1,6 @@
 import { Schema } from "@effect/schema";
 import { Effect, Match } from "effect";
+import Form from "../components/Form";
 import Location from "../components/Location";
 import Posts from "../components/Posts";
 import { Api } from "../services/Api";
@@ -23,6 +24,7 @@ export default async function HomePage() {
     <div>
       <title>Index</title>
       <Location />
+      <Form />
       {await RuntimeServer.runPromise(
         main.pipe(
           Effect.mapError((errors) =>
