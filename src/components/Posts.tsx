@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { HashSet } from "effect";
+import { useActionState, useState } from "react";
 import { likePost } from "../actions/like-post";
 import type { Post } from "../services/schema";
 
@@ -9,24 +10,33 @@ export default function Posts({
 }: {
   posts: readonly (typeof Post.Encoded)[];
 }) {
+  const [checkedPosts, setCheckedPosts] = useState(HashSet.empty<number>());
   return (
     <div>
       {posts.map((post) => (
-        <SinglePost key={post.id} post={post} />
+        <SinglePost
+          key={post.id}
+          post={post}
+          checked={HashSet.has(checkedPosts, post.id)}
+          onChecked={() =>
+            setCheckedPosts(HashSet.toggle(checkedPosts, post.id))
+          }
+        />
       ))}
     </div>
   );
 }
 
-const SinglePost = ({ post }: { post: typeof Post.Encoded }) => {
-  const [error, setLiked, pending] = useActionState(async () => {
-    try {
-      await likePost(post.id);
-      return null;
-    } catch (error) {
-      return error instanceof Error ? error.message : "Unknown error";
-    }
-  }, null);
+const SinglePost = ({
+  post,
+  onChecked,
+  checked,
+}: {
+  post: typeof Post.Encoded;
+  checked: boolean;
+  onChecked: () => void;
+}) => {
+  const [_, setLiked, pending] = useActionState(() => likePost(post.id), null);
   return (
     <div>
       <h1>{post.title}</h1>
@@ -34,7 +44,7 @@ const SinglePost = ({ post }: { post: typeof Post.Encoded }) => {
       <button disabled={pending} onClick={setLiked}>
         Like
       </button>
-      {error && <p>{error}</p>}
+      <input type="checkbox" checked={checked} onChange={onChecked} />
     </div>
   );
 };
