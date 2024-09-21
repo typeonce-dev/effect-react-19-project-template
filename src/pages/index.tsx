@@ -1,6 +1,9 @@
+import { Schema } from "@effect/schema";
 import { Effect, Match } from "effect";
+import Posts from "../components/Posts";
 import { Api } from "../services/Api";
 import { RuntimeServer } from "../services/RuntimeServer";
+import { Post } from "../services/schema";
 
 export const getConfig = async () => {
   return {
@@ -10,7 +13,8 @@ export const getConfig = async () => {
 
 const main = Effect.gen(function* () {
   const api = yield* Api;
-  return yield* api.getPosts;
+  const posts = yield* api.getPosts;
+  return yield* Schema.encode(Schema.Array(Post))(posts);
 }).pipe(Effect.scoped);
 
 export default async function HomePage() {
@@ -28,16 +32,7 @@ export default async function HomePage() {
               })
             )
           ),
-          Effect.map((posts) => (
-            <div>
-              {posts.map((post) => (
-                <div key={post.id}>
-                  <h1>{post.title}</h1>
-                  <p>{post.body}</p>
-                </div>
-              ))}
-            </div>
-          )),
+          Effect.map((posts) => <Posts posts={posts} />),
           Effect.catchAll(Effect.succeed)
         )
       )}
