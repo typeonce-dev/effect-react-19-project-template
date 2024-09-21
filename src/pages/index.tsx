@@ -1,5 +1,6 @@
 import { Schema } from "@effect/schema";
 import { Effect, Match } from "effect";
+import Location from "../components/Location";
 import Posts from "../components/Posts";
 import { Api } from "../services/Api";
 import { RuntimeServer } from "../services/RuntimeServer";
@@ -21,6 +22,7 @@ export default async function HomePage() {
   return (
     <div>
       <title>Index</title>
+      <Location />
       {await RuntimeServer.runPromise(
         main.pipe(
           Effect.mapError((errors) =>

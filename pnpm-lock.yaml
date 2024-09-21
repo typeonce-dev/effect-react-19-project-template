@@ -11,6 +11,9 @@ importers:
       '@effect/platform':
         specifier: ^0.65.5
         version: 0.65.5(@effect/schema@0.73.4(effect@3.8.3))(effect@3.8.3)
+      '@effect/platform-browser':
+        specifier: ^0.44.5
+        version: 0.44.5(@effect/platform@0.65.5(@effect/schema@0.73.4(effect@3.8.3))(effect@3.8.3))(effect@3.8.3)
       '@effect/schema':
         specifier: ^0.73.4
         version: 0.73.4(effect@3.8.3)
@@ -132,6 +135,12 @@ packages:
   '@babel/types@7.25.6':
     resolution: {integrity: sha512-/l42B1qxpG6RdfYf343Uw1vmDjeNhneUXtzhojE7pDgfpEypmRhI6j1kr17XCVv4Cgl9HdAiQY2x0GwKm7rWCw==}
     engines: {node: '>=6.9.0'}
+
+  '@effect/platform-browser@0.44.5':
+    resolution: {integrity: sha512-zt5armDm/SMdGdsu82MMpywVEXoRfiNchLJlMysnfRmzX2a3XsIYP4cVgPWyt1DBvl2ulU/WxumZ4frPXyhWQQ==}
+    peerDependencies:
+      '@effect/platform': ^0.65.5
+      effect: ^3.8.3
 
   '@effect/platform@0.65.5':
     resolution: {integrity: sha512-FAORK6KoMQbd2VyLq/BMwcViy1txYd7XD9eYd5IGrXFpoOgWrSjp4zaSDlFPIEGgm68+n8fN0RelkbuMHCkSsg==}
@@ -1094,6 +1103,12 @@ snapshots:
       '@babel/helper-string-parser': 7.24.8
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
+
+  '@effect/platform-browser@0.44.5(@effect/platform@0.65.5(@effect/schema@0.73.4(effect@3.8.3))(effect@3.8.3))(effect@3.8.3)':
+    dependencies:
+      '@effect/platform': 0.65.5(@effect/schema@0.73.4(effect@3.8.3))(effect@3.8.3)
+      effect: 3.8.3
+      multipasta: 0.2.5
 
   '@effect/platform@0.65.5(@effect/schema@0.73.4(effect@3.8.3))(effect@3.8.3)':
     dependencies:
