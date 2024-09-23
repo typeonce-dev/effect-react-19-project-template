@@ -16,8 +16,8 @@ export const getConfig = async () => {
 const main = Effect.gen(function* () {
   const api = yield* Api;
   const posts = yield* api.getPosts;
-  return yield* Schema.encode(Schema.Array(Post))(posts);
-}).pipe(Effect.scoped);
+  return yield* Schema.encode(Post.Array)(posts);
+});
 
 export default async function HomePage() {
   return (
@@ -27,17 +27,14 @@ export default async function HomePage() {
       <Form />
       {await RuntimeServer.runPromise(
         main.pipe(
-          Effect.mapError((errors) =>
-            Match.value(errors).pipe(
-              Match.tagsExhaustive({
-                ParseError: (error) => <span>ParseError</span>,
-                RequestError: (error) => <span>RequestError</span>,
-                ResponseError: (error) => <span>ResponseError</span>,
-              })
-            )
-          ),
-          Effect.map((posts) => <Posts posts={posts} />),
-          Effect.catchAll(Effect.succeed)
+          Effect.match({
+            onFailure: Match.valueTags({
+              ParseError: (error) => <span>ParseError</span>,
+              RequestError: (error) => <span>RequestError</span>,
+              ResponseError: (error) => <span>ResponseError</span>,
+            }),
+            onSuccess: (posts) => <Posts posts={posts} />,
+          })
         )
       )}
     </div>
