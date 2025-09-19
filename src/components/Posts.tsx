@@ -1,7 +1,7 @@
 "use client";
 
 import { HashSet } from "effect";
-import { useActionState, useState } from "react";
+import { startTransition, useActionState, useState } from "react";
 import { likePost } from "../actions/like-post";
 import type { Post } from "../services/schema";
 
@@ -41,7 +41,7 @@ const SinglePost = ({
     <div>
       <h1>{post.title}</h1>
       <p>{post.body}</p>
-      <button disabled={pending} onClick={setLiked}>
+      <button disabled={pending} onClick={() => startTransition(setLiked)}>
         Like
       </button>
       <input type="checkbox" checked={checked} onChange={onChecked} />

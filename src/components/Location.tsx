@@ -2,7 +2,7 @@
 
 import { Geolocation } from "@effect/platform-browser";
 import { Effect } from "effect";
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import { RuntimeClient } from "../services/RuntimeClient";
 
 const action = Effect.gen(function* () {
@@ -17,7 +17,7 @@ export default function Location() {
   );
   return (
     <div>
-      <button disabled={pending} onClick={getLocation}>
+      <button disabled={pending} onClick={() => startTransition(getLocation)}>
         Get Location
       </button>
       <p>
